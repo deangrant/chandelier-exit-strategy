@@ -1,0 +1,27 @@
+// Chandelier Exit Strategy
+//
+// This script implements the Chandelier Exit strategy, which uses a trailing stop
+// based on the Average True Range (ATR) to set the exit price for a long or short 
+// position.
+//
+// Parameters:
+//  - atr_periods: number of periods for ATR calculation (default = 22)
+//  - atr_multiple: multiple of ATR for stop price calculation (default = 3)
+
+// @version=5
+// @author=Dean Grant
+
+indicator(title="Chandelier Exit Stop Technique", shorttitle="Chandelier Exit", overlay=true)
+
+// Set default values for input parameters
+atr_periods = input.int(defval=22, minval=1, title="ATR Periods")
+atr_multiple = input.int(defval=3, minval=0, title="ATR Multiple")
+
+// Calculate ATR and stop price
+atr = ta.atr(atr_periods)
+long_stop = ta.highest(high, atr_periods) - atr_multiple * atr
+short_stop = ta.lowest(low, atr_periods) + atr_multiple  * atr
+
+// Plot stop line
+plot(long_stop, color=color.green, linewidth=2, title="Buy/Long")
+plot(short_stop, color=color.red, linewidth=2, title="Sell/Short")
